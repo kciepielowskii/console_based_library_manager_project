@@ -1,0 +1,38 @@
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class LibraryTest {
+    @Test
+    public void shouldAddBookSuccessfully() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        assertDoesNotThrow(() -> library.addBook(book));
+    }
+    @Test
+    public void shouldThrowExceptionWhenAddingDuplicateBook() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        library.addBook(book);
+        Book theSameBook = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        assertThrows(IllegalStateException.class, () -> library.addBook(theSameBook));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAddingNullBook() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () -> library.addBook(null));
+    }
+}
