@@ -1,6 +1,5 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.Comparator;
 
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
@@ -31,5 +30,15 @@ public class Library {
             throw new IllegalArgumentException("ISBN cannot be null or blank");
         }
         return Optional.ofNullable(booksByIsbn.get(isbn));
+    }
+
+    public List<Book> findBooksByAuthor(String author) {
+        if (author == null || author.isBlank()) {
+            throw new IllegalArgumentException("Author cannot be null or blank");
+        }
+        return booksByIsbn.values().stream()
+                .filter(book -> book.author().equals(author))
+                .sorted(Comparator.comparing(Book::title))
+                .toList();
     }
 }
