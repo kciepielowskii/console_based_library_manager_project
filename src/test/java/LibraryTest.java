@@ -29,10 +29,37 @@ public class LibraryTest {
                 2002);
         assertThrows(IllegalStateException.class, () -> library.addBook(theSameBook));
     }
-
     @Test
     public void shouldThrowExceptionWhenAddingNullBook() {
         Library library = new Library();
         assertThrows(IllegalArgumentException.class, () -> library.addBook(null));
+    }
+    @Test
+    public void shouldRegisterReaderSuccessfully() {
+        Library library = new Library();
+        Reader reader = new Reader(
+                1,
+                "Alice"
+        );
+        assertDoesNotThrow(() -> library.registerReader(reader));
+    }
+    @Test
+    public void shouldThrowExceptionWhenRegisteringDuplicateReader() {
+        Library library = new Library();
+        Reader reader = new Reader(
+                1,
+                "Alice"
+        );
+        library.registerReader(reader);
+        Reader theSameReader = new Reader(
+                1,
+                "Alice"
+        );
+        assertThrows(IllegalStateException.class, () -> library.registerReader(theSameReader));
+    }
+    @Test
+    public void shouldThrowExceptionWhenRegisteringNullReader() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () -> library.registerReader(null));
     }
 }
