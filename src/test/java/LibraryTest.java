@@ -62,4 +62,49 @@ public class LibraryTest {
         Library library = new Library();
         assertThrows(IllegalArgumentException.class, () -> library.registerReader(null));
     }
+    @Test
+    public void shouldFindBookByIsbnSuccessfully() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        library.addBook(book);
+        assertEquals(
+                book,
+                library.findBookByIsbn("978-0141439518").orElseThrow()
+        );
+    }
+    @Test
+    public void shouldThrowExceptionWhenIsbnIsNull() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        library.addBook(book);
+        assertThrows(
+                IllegalArgumentException.class, () -> library.findBookByIsbn(null)
+        );
+    }
+    @Test
+    public void shouldThrowExceptionWhenIsbnIsBlank() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518" ,
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002);
+        library.addBook(book);
+        assertThrows(
+                IllegalArgumentException.class, () -> library.findBookByIsbn("     ")
+        );
+    }
+    @Test
+    public void shouldReturnEmptyWhenBookDoesNotExist() {
+        Library library = new Library();
+        assertTrue(library.findBookByIsbn("978-0141439518").isEmpty());
+    }
 }

@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
@@ -23,5 +24,12 @@ public class Library {
             throw new IllegalStateException("Reader with ID " + reader.getId() + " already exists");
         }
         readersById.put(reader.getId(), reader);
+    }
+
+    public Optional<Book> findBookByIsbn(String isbn) {
+        if (isbn == null || isbn.isEmpty()) {
+            throw new IllegalArgumentException("ISBN cannot be null or blank");
+        }
+        return Optional.ofNullable(booksByIsbn.get(isbn));
     }
 }
