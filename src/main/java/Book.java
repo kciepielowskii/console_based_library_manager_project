@@ -1,8 +1,8 @@
 import java.time.Year;
 
-public record Book(String ISBN, String title, String author, int year) {
+public record Book(String isbn, String title, String author, int year) {
     public Book {
-        if (ISBN == null || ISBN.isBlank()) {
+        if (isbn == null || isbn.isBlank()) {
             throw new IllegalArgumentException("ISBN must not be null or blank");
         }
         if (title == null || title.isBlank()) {

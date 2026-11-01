@@ -13,7 +13,7 @@ class BookTest {
                 2008
         );
 
-        assertEquals("978-0141439518", book.ISBN());
+        assertEquals("978-0141439518", book.isbn());
         assertEquals("Pride and Prejudice", book.title());
         assertEquals("Jane Austen", book.author());
         assertEquals(2008, book.year());

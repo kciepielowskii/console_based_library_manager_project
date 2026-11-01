@@ -10,10 +10,10 @@ public class Library {
         if (book == null) {
             throw new IllegalArgumentException("Book cannot be null");
         }
-        if (booksByIsbn.containsKey(book.ISBN())) {
-            throw new IllegalStateException("Book with ISBN " + book.ISBN() + " already exists");
+        if (booksByIsbn.containsKey(book.isbn())) {
+            throw new IllegalStateException("Book with ISBN " + book.isbn() + " already exists");
         }
-        booksByIsbn.put(book.ISBN(), book);
+        booksByIsbn.put(book.isbn(), book);
     }
 
     public void registerReader(Reader reader) {
