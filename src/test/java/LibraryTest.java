@@ -262,7 +262,7 @@ public class LibraryTest {
     @Test
     public void shouldBorrowBookSuccessfully() {
         Library library = new Library();
-        Book book1 = new Book(
+        Book book = new Book(
                 "978-0141439518",
                 "Pride and Prejudice",
                 "Jane Austen",
@@ -270,8 +270,72 @@ public class LibraryTest {
         );
         Reader reader = new Reader(1, "Alice");
         library.registerReader(reader);
-        library.addBook(book1);
+        library.addBook(book);
         assertDoesNotThrow(() -> library.borrowBook(1, "978-0141439518"));
-        assertTrue(reader.getBorrowedBooks().contains(book1));
+        assertTrue(reader.getBorrowedBooks().contains(book));
+    }
+    @Test
+    public void shouldReturnBookSuccessfully() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.addBook(book);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        assertDoesNotThrow(() -> library.returnBook("978-0141439518"));
+        assertFalse(reader.getBorrowedBooks().contains(book));
+    }
+    @Test
+    public void shouldThrowExceptionWhenReturningBookWithNullIsbn() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () ->
+                library.returnBook(null));
+    }
+    @Test
+    public void shouldThrowExceptionWhenReturningBookWithBlankIsbn() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () ->
+                library.returnBook("     "));
+    }
+    @Test
+    public void shouldThrowExceptionWhenReturningNonExistentBook() {
+        Library library = new Library();
+        assertThrows(BookNotFoundException.class, () ->
+                library.returnBook("978-0141439518"));
+    }
+    @Test
+    public void shouldThrowExceptionWhenReturningBookThatIsNotBorrowed() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        library.addBook(book);
+        assertThrows(IllegalStateException.class, () ->
+                library.returnBook("978-0141439518"));
+    }
+    @Test
+    public void shouldBorrowBookAgainAfterReturningIt() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.addBook(book);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        library.returnBook("978-0141439518");
+        assertDoesNotThrow(() -> library.borrowBook(1, "978-0141439518"));
+        assertTrue(reader.getBorrowedBooks().contains(book));
     }
 }

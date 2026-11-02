@@ -72,4 +72,26 @@ public class Library {
         return readersById.values().stream()
                 .anyMatch(reader -> reader.getBorrowedBooks().contains(book));
     }
+
+    public void returnBook(String isbn) {
+        if (isbn == null || isbn.isBlank()) {
+            throw new IllegalArgumentException("ISBN cannot be null or blank");
+        }
+        if (!booksByIsbn.containsKey(isbn)) {
+            throw new BookNotFoundException("Book with ISBN " + isbn + " does not exist");
+        }
+        Book book = booksByIsbn.get(isbn);
+        if (!isBorrowed(book)) {
+            throw new IllegalStateException("Book with ISBN " + isbn + " is not borrowed");
+        }
+        findReaderByBorrowedBook(book)
+                .orElseThrow(() -> new IllegalStateException("Book is not borrowed"))
+                .returnBook(book);
+    }
+
+    private Optional<Reader> findReaderByBorrowedBook(Book book) {
+        return readersById.values().stream()
+                .filter(reader -> reader.getBorrowedBooks().contains(book))
+                .findFirst();
+    }
 }

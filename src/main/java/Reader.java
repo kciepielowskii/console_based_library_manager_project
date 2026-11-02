@@ -1,4 +1,5 @@
 import exception.BookAlreadyBorrowedException;
+import exception.BookNotFoundException;
 import exception.BorrowLimitExceededException;
 
 import java.util.ArrayList;
@@ -42,5 +43,15 @@ public class Reader {
             throw new BorrowLimitExceededException("Usage limit: 3/3 books borrowed");
         }
         borrowedBooks.add(book);
+    }
+
+    public void returnBook(Book book) {
+        if (book == null) {
+            throw new IllegalArgumentException("Book must not be null");
+        }
+        if (!borrowedBooks.contains(book)) {
+            throw new BookNotFoundException("Book not found");
+        }
+        borrowedBooks.remove(book);
     }
 }
