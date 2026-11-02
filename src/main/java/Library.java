@@ -96,4 +96,12 @@ public class Library {
                 .filter(book -> !isBorrowed(book))
                 .toList();
     }
+
+    public List<Book> findBooksBorrowedByReader(long readerId) {
+        return readersById.values().stream()
+                .filter(reader -> reader.getId() == readerId)
+                .findFirst().orElseThrow(() ->
+                        new ReaderNotFoundException("Reader with ID " + readerId + " does not exist"))
+                .getBorrowedBooks();
+    }
 }

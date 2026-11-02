@@ -410,4 +410,43 @@ public class LibraryTest {
         Library library = new Library();
         assertTrue(library.findAvailableBooks().isEmpty());
     }
+    @Test
+    public void shouldFindBooksBorrowedByReader() {
+        Library library = new Library();
+        Reader reader = new Reader(1, "Alice");
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        library.borrowBook(1, "978-0141439662");
+        List<Book> borrowedBooks = library.findBooksBorrowedByReader(1);
+
+        assertTrue(borrowedBooks.contains(book1));
+        assertTrue(borrowedBooks.contains(book2));
+    }
+    @Test
+    public void shouldReturnEmptyListWhenReaderHasNoBorrowedBooks() {
+        Library library = new Library();
+        Reader reader = new Reader(1, "Alice");
+        library.registerReader(reader);
+        assertTrue(library.findBooksBorrowedByReader(1).isEmpty());
+    }
+    @Test
+    public void shouldThrowExceptionWhenReaderDoesNotExist() {
+        Library library = new Library();
+        assertThrows(ReaderNotFoundException.class, () ->
+                library.findBooksBorrowedByReader(1));
+    }
 }
