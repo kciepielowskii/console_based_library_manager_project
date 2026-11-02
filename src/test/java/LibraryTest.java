@@ -1,3 +1,7 @@
+import exception.BookAlreadyBorrowedException;
+import exception.BookNotFoundException;
+import exception.BorrowLimitExceededException;
+import exception.ReaderNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -110,7 +114,7 @@ public class LibraryTest {
         assertTrue(library.findBookByIsbn("978-0141439518").isEmpty());
     }
     @Test
-    public void shouldReturnAuthorBooksSuccessfully() {
+    public void shouldFindBooksByAuthorSuccessfully() {
         Library library = new Library();
         Book book1 = new Book(
                 "978-0141439518",
@@ -173,5 +177,101 @@ public class LibraryTest {
         Library library = new Library();
         assertThrows(IllegalArgumentException.class, () ->
                 library.findBooksByAuthor("   "));
+    }
+    @Test
+    public void shouldThrowExceptionWhenBorrowingBookWithNullIsbn() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () ->
+                library.borrowBook(1, null));
+    }
+    @Test
+    public void shouldThrowExceptionWhenBorrowingBookWithBlankIsbn() {
+        Library library = new Library();
+        assertThrows(IllegalArgumentException.class, () ->
+                library.borrowBook(1, "     "));
+    }
+    @Test
+    public void shouldThrowExceptionWhenBorrowingNonExistentBook() {
+        Library library = new Library();
+        assertThrows(BookNotFoundException.class, () ->
+                library.borrowBook(1, "978-0141439587"));
+    }
+    @Test
+    public void shouldThrowExceptionWhenBorrowingNonExistentReader() {
+        Library library = new Library();
+        library.addBook(new Book(
+                "978-0141439587",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002));
+        assertThrows(ReaderNotFoundException.class, () ->
+                library.borrowBook(2, "978-0141439587"));
+    }
+    @Test
+    public void shouldThrowExceptionWhenBorrowingAnAlreadyBorrowedBook() {
+        Library library = new Library();
+        library.addBook(new Book(
+                "978-0141439587",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002));
+        library.registerReader(new Reader(1, "Alice"));
+        library.registerReader(new Reader(2, "Bob"));
+        library.borrowBook(1, "978-0141439587");
+        assertThrows(BookAlreadyBorrowedException.class, () ->
+                library.borrowBook(2, "978-0141439587"));
+    }
+    @Test
+    public void shouldThrowExceptionWhenReaderExceedsBorrowingLimit() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        Book book3 = new Book(
+                "978-0141439587",
+                "Emma",
+                "Jane Austen",
+                2003
+        );
+        Book book4 = new Book(
+                "978-0141439877",
+                "Persuasion",
+                "Jane Austen",
+                2003
+        );
+        library.registerReader(new Reader(1, "Alice"));
+        library.addBook(book1);
+        library.addBook(book2);
+        library.addBook(book3);
+        library.addBook(book4);
+        library.borrowBook(1, "978-0141439518");
+        library.borrowBook(1, "978-0141439662");
+        library.borrowBook(1, "978-0141439587");
+        assertThrows(BorrowLimitExceededException.class, () ->
+                library.borrowBook(1, "978-0141439877"));
+    }
+    @Test
+    public void shouldBorrowBookSuccessfully() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.registerReader(reader);
+        library.addBook(book1);
+        assertDoesNotThrow(() -> library.borrowBook(1, "978-0141439518"));
+        assertTrue(reader.getBorrowedBooks().contains(book1));
     }
 }

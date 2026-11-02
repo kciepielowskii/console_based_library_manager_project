@@ -1,3 +1,6 @@
+import exception.BookAlreadyBorrowedException;
+import exception.BorrowLimitExceededException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,5 +26,21 @@ public class Reader {
 
     public String getName() {
         return name;
+    }
+    public List<Book> getBorrowedBooks() {
+        return List.copyOf(borrowedBooks);
+    }
+
+    public void borrowBook(Book book) {
+        if (book == null) {
+            throw new IllegalArgumentException("Book must not be null");
+        }
+        if (borrowedBooks.contains(book)) {
+            throw new BookAlreadyBorrowedException("Book is already borrowed by this reader");
+        }
+        if (borrowedBooks.size() >= 3) {
+            throw new BorrowLimitExceededException("Usage limit: 3/3 books borrowed");
+        }
+        borrowedBooks.add(book);
     }
 }

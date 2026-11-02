@@ -1,5 +1,12 @@
-import java.util.*;
+import exception.BookAlreadyBorrowedException;
+import exception.BookNotFoundException;
+import exception.ReaderNotFoundException;
+
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
@@ -26,7 +33,7 @@ public class Library {
     }
 
     public Optional<Book> findBookByIsbn(String isbn) {
-        if (isbn == null || isbn.isEmpty()) {
+        if (isbn == null || isbn.isBlank()) {
             throw new IllegalArgumentException("ISBN cannot be null or blank");
         }
         return Optional.ofNullable(booksByIsbn.get(isbn));
@@ -40,5 +47,29 @@ public class Library {
                 .filter(book -> book.author().equals(author))
                 .sorted(Comparator.comparing(Book::title))
                 .toList();
+    }
+
+    public void borrowBook(long readerId, String isbn) {
+        if (isbn == null || isbn.isBlank()) {
+            throw new IllegalArgumentException("ISBN cannot be null or blank");
+        }
+        if (!booksByIsbn.containsKey(isbn)) {
+            throw new BookNotFoundException("Book with ISBN " + isbn + " does not exist");
+        }
+        if (!readersById.containsKey(readerId)) {
+            throw new ReaderNotFoundException("Reader with ID " + readerId + " does not exist");
+        }
+        Book book = booksByIsbn.get(isbn);
+        Reader reader = readersById.get(readerId);
+
+        if (isBorrowed(book)) {
+            throw new BookAlreadyBorrowedException("Book with ISBN " + isbn + " is already borrowed");
+        }
+        reader.borrowBook(book);
+    }
+
+    private boolean isBorrowed(Book book) {
+        return readersById.values().stream()
+                .anyMatch(reader -> reader.getBorrowedBooks().contains(book));
     }
 }
