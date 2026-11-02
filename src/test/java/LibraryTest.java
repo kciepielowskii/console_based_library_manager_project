@@ -338,4 +338,76 @@ public class LibraryTest {
         assertDoesNotThrow(() -> library.borrowBook(1, "978-0141439518"));
         assertTrue(reader.getBorrowedBooks().contains(book));
     }
+    @Test
+    public void shouldFindAllAvailableBooks() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        assertEquals(2, library.findAvailableBooks().size());
+        assertTrue(library.findAvailableBooks().contains(book1));
+        assertTrue(library.findAvailableBooks().contains(book2));
+    }
+    @Test
+    public void shouldExcludeBorrowedBooks() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.addBook(book1);
+        library.addBook(book2);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        assertFalse(library.findAvailableBooks().contains(book1));
+        assertTrue(library.findAvailableBooks().contains(book2));
+    }
+    @Test
+    public void shouldReturnEmptyListWhenNoBooksAreAvailable() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.addBook(book1);
+        library.addBook(book2);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        library.borrowBook(1, "978-0141439662");
+        assertTrue(library.findAvailableBooks().isEmpty());
+    }
+    @Test
+    public void shouldReturnEmptyListWhenLibraryIsEmpty() {
+        Library library = new Library();
+        assertTrue(library.findAvailableBooks().isEmpty());
+    }
 }

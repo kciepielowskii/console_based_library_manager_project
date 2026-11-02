@@ -2,11 +2,7 @@ import exception.BookAlreadyBorrowedException;
 import exception.BookNotFoundException;
 import exception.ReaderNotFoundException;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
@@ -93,5 +89,11 @@ public class Library {
         return readersById.values().stream()
                 .filter(reader -> reader.getBorrowedBooks().contains(book))
                 .findFirst();
+    }
+
+    public List<Book> findAvailableBooks() {
+        return booksByIsbn.values().stream()
+                .filter(book -> !isBorrowed(book))
+                .toList();
     }
 }
