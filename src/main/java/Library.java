@@ -110,4 +110,8 @@ public class Library {
         return booksByIsbn.values().stream()
                 .collect(Collectors.groupingBy(Book::author, Collectors.counting()));
     }
+
+    public int getTotalBooksCount() {
+        return booksByIsbn.size();
+    }
 }

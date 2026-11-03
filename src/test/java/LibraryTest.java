@@ -497,4 +497,43 @@ public class LibraryTest {
         Library library = new Library();
         assertTrue(library.countBooksPerAuthor().isEmpty());
     }
+    @Test
+    public void shouldReturnTotalNumberOfBooks() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Alice Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        assertEquals(2, library.getTotalBooksCount());
+    }
+    @Test
+    public void shouldReturnZeroWhenLibraryIsEmpty() {
+        Library library = new Library();
+        assertEquals(0, library.getTotalBooksCount());
+    }
+    @Test
+    public void shouldCountBorrowedBooks() {
+        Library library = new Library();
+        Book book = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Reader reader = new Reader(1, "Alice");
+        library.addBook(book);
+        library.registerReader(reader);
+        library.borrowBook(1, "978-0141439518");
+        assertEquals(1, library.getTotalBooksCount());
+    }
 }
