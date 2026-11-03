@@ -5,6 +5,7 @@ import exception.ReaderNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -448,5 +449,52 @@ public class LibraryTest {
         Library library = new Library();
         assertThrows(ReaderNotFoundException.class, () ->
                 library.findBooksBorrowedByReader(1));
+    }
+    @Test
+    public void shouldCountBooksPerAuthor() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Jane Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        assertDoesNotThrow(library::countBooksPerAuthor);
+        assertEquals(2L, library.countBooksPerAuthor().get("Jane Austen"));
+    }
+    @Test
+    public void shouldCountBooksPerDifferentAuthors() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Alice Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        Map<String, Long> countBooksPerAuthor = library.countBooksPerAuthor();
+        assertEquals(1L, countBooksPerAuthor.get("Jane Austen"));
+        assertEquals(1L, countBooksPerAuthor.get("Alice Austen"));
+        assertEquals(2, countBooksPerAuthor.size());
+    }
+    @Test
+    public void shouldReturnEmptyMapWhenLibraryIsEmpty() {
+        Library library = new Library();
+        assertTrue(library.countBooksPerAuthor().isEmpty());
     }
 }

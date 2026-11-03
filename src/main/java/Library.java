@@ -3,6 +3,7 @@ import exception.BookNotFoundException;
 import exception.ReaderNotFoundException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
@@ -103,5 +104,10 @@ public class Library {
                 .findFirst().orElseThrow(() ->
                         new ReaderNotFoundException("Reader with ID " + readerId + " does not exist"))
                 .getBorrowedBooks();
+    }
+
+    public Map<String, Long> countBooksPerAuthor() {
+        return booksByIsbn.values().stream()
+                .collect(Collectors.groupingBy(Book::author, Collectors.counting()));
     }
 }
