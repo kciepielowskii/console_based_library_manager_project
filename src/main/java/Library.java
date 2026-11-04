@@ -120,4 +120,38 @@ public class Library {
                 .mapToInt(reader -> reader.getBorrowedBooks().size())
                 .sum();
     }
+
+    public String toBuildReport() {
+        int total = getTotalBooksCount();
+        int borrowed = getBorrowedBooksCount();
+
+        StringBuilder report = new StringBuilder();
+        report.append("Library report\n");
+        report.append("Books: ").append(total)
+                .append(" (borrowed: ").append(borrowed)
+                .append(", available: ").append(total - borrowed)
+                .append(")\n");
+        report.append("Readers: ").append(readersById.size()).append("\n");
+
+        List<Reader> sortedReaders = readersById.values().stream()
+                .sorted(Comparator.comparingLong(Reader::getId))
+                .toList();
+
+        for (Reader reader : sortedReaders) {
+            String titles = reader.getBorrowedBooks().stream()
+                    .map(Book::title)
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+
+            if (titles.isEmpty()) {
+                titles = "(no borrowed books)";
+            }
+
+            report.append("  ").append(reader.getId()).append(" ")
+                    .append(reader.getName()).append(": ").append(titles).append("\n");
+        }
+
+        return report.toString();
+    }
+
 }

@@ -585,4 +585,34 @@ public class LibraryTest {
         Library library = new Library();
         assertEquals(0, library.getBorrowedBooksCount());
     }
+    @Test
+    public void shouldBuildReportForEmptyLibrary() {
+        Library library = new Library();
+        assertEquals("Library report\nBooks: 0 (borrowed: 0, available: 0)\nReaders: 0\n",
+                library.toBuildReport());
+    }
+    @Test
+    public void shouldListReadersWithTheirBooksInIdOrder() {
+        Library library = new Library();
+        library.addBook(new Book(
+                "978-0141439518",
+                "Emma",
+                "Jane Austen",
+                2003));
+        library.addBook(new Book(
+                "978-0141439662",
+                "Persuasion",
+                "Jane Austen", 2003));
+        library.registerReader(new Reader(2,
+                "Bob"));
+        library.registerReader(new Reader(1, "Alice"));
+        library.borrowBook(1, "978-0141439518");
+
+        String report = library.toBuildReport();
+
+        assertTrue(report.contains("Books: 2 (borrowed: 1, available: 1)"));
+        assertTrue(report.contains("1 Alice: Emma"));
+        assertTrue(report.contains("2 Bob: (no borrowed books)"));
+        assertTrue(report.indexOf("1 Alice") < report.indexOf("2 Bob"));
+    }
 }
