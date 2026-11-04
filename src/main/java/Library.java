@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class Library {
     private final Map<String, Book> booksByIsbn = new HashMap<>();
     private final Map<Long, Reader> readersById = new HashMap<>();
+    private final Set<Book> borrowedBooks = new HashSet<>();
 
     public void addBook(Book book) {
         if (book == null) {
@@ -63,11 +64,11 @@ public class Library {
             throw new BookAlreadyBorrowedException("Book with ISBN " + isbn + " is already borrowed");
         }
         reader.borrowBook(book);
+        borrowedBooks.add(book);
     }
 
     private boolean isBorrowed(Book book) {
-        return readersById.values().stream()
-                .anyMatch(reader -> reader.getBorrowedBooks().contains(book));
+        return borrowedBooks.contains(book);
     }
 
     public void returnBook(String isbn) {
@@ -78,12 +79,10 @@ public class Library {
             throw new BookNotFoundException("Book with ISBN " + isbn + " does not exist");
         }
         Book book = booksByIsbn.get(isbn);
-        if (!isBorrowed(book)) {
-            throw new IllegalStateException("Book with ISBN " + isbn + " is not borrowed");
-        }
         findReaderByBorrowedBook(book)
-                .orElseThrow(() -> new IllegalStateException("Book is not borrowed"))
+                .orElseThrow(() -> new IllegalStateException("Book with ISBN " + isbn + " is not borrowed"))
                 .returnBook(book);
+        borrowedBooks.remove(book);
     }
 
     private Optional<Reader> findReaderByBorrowedBook(Book book) {
@@ -99,11 +98,11 @@ public class Library {
     }
 
     public List<Book> findBooksBorrowedByReader(long readerId) {
-        return readersById.values().stream()
-                .filter(reader -> reader.getId() == readerId)
-                .findFirst().orElseThrow(() ->
-                        new ReaderNotFoundException("Reader with ID " + readerId + " does not exist"))
-                .getBorrowedBooks();
+        Reader reader = readersById.get(readerId);
+        if (reader == null) {
+            throw new ReaderNotFoundException("Reader with ID " + readerId + " does not exist");
+        }
+        return reader.getBorrowedBooks();
     }
 
     public Map<String, Long> countBooksPerAuthor() {
@@ -121,7 +120,7 @@ public class Library {
                 .sum();
     }
 
-    public String toBuildReport() {
+    public String buildReport() {
         int total = getTotalBooksCount();
         int borrowed = getBorrowedBooksCount();
 
@@ -154,4 +153,7 @@ public class Library {
         return report.toString();
     }
 
+    public Optional<Reader> findReaderById(long readerId) {
+        return Optional.ofNullable(readersById.get(readerId));
+    }
 }

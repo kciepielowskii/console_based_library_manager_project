@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Reader {
+    private static final int MAX_BORROWED_BOOKS = 3;
+
     private final long id;
     private final String name;
     private final List<Book> borrowedBooks = new ArrayList<>();
@@ -39,8 +41,10 @@ public class Reader {
         if (borrowedBooks.contains(book)) {
             throw new BookAlreadyBorrowedException("Book is already borrowed by this reader");
         }
-        if (borrowedBooks.size() >= 3) {
-            throw new BorrowLimitExceededException("Usage limit: 3/3 books borrowed");
+        if (borrowedBooks.size() >= MAX_BORROWED_BOOKS) {
+            throw new BorrowLimitExceededException(
+                    "Usage limit: " + MAX_BORROWED_BOOKS + "/" +
+                            MAX_BORROWED_BOOKS + " books borrowed");
         }
         borrowedBooks.add(book);
     }

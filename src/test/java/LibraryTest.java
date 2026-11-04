@@ -589,7 +589,7 @@ public class LibraryTest {
     public void shouldBuildReportForEmptyLibrary() {
         Library library = new Library();
         assertEquals("Library report\nBooks: 0 (borrowed: 0, available: 0)\nReaders: 0\n",
-                library.toBuildReport());
+                library.buildReport());
     }
     @Test
     public void shouldListReadersWithTheirBooksInIdOrder() {
@@ -608,7 +608,7 @@ public class LibraryTest {
         library.registerReader(new Reader(1, "Alice"));
         library.borrowBook(1, "978-0141439518");
 
-        String report = library.toBuildReport();
+        String report = library.buildReport();
 
         assertTrue(report.contains("Books: 2 (borrowed: 1, available: 1)"));
         assertTrue(report.contains("1 Alice: Emma"));
