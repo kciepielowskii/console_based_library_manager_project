@@ -114,4 +114,10 @@ public class Library {
     public int getTotalBooksCount() {
         return booksByIsbn.size();
     }
+
+    public int getBorrowedBooksCount() {
+        return readersById.values().stream()
+                .mapToInt(reader -> reader.getBorrowedBooks().size())
+                .sum();
+    }
 }

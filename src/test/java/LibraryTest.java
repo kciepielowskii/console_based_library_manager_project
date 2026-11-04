@@ -536,4 +536,53 @@ public class LibraryTest {
         library.borrowBook(1, "978-0141439518");
         assertEquals(1, library.getTotalBooksCount());
     }
+    @Test
+    public void shouldReturnBorrowedBooksCount() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Alice Austen",
+                2003
+        );
+        Reader reader = new Reader(1, "Alice");
+        Reader reader2 = new Reader(2, "Jane");
+        library.registerReader(reader);
+        library.registerReader(reader2);
+        library.addBook(book1);
+        library.addBook(book2);
+        library.borrowBook(1, "978-0141439518");
+        library.borrowBook(2, "978-0141439662");
+        assertEquals(2, library.getBorrowedBooksCount());
+    }
+    @Test
+    public void shouldReturnZeroWhenNoBooksAreBorrowed() {
+        Library library = new Library();
+        Book book1 = new Book(
+                "978-0141439518",
+                "Pride and Prejudice",
+                "Jane Austen",
+                2002
+        );
+        Book book2 = new Book(
+                "978-0141439662",
+                "Sense and Sensibility",
+                "Alice Austen",
+                2003
+        );
+        library.addBook(book1);
+        library.addBook(book2);
+        assertEquals(0, library.getBorrowedBooksCount());
+    }
+    @Test
+    public void shouldReturnZeroBorrowedBooksWhenLibraryIsEmpty() {
+        Library library = new Library();
+        assertEquals(0, library.getBorrowedBooksCount());
+    }
 }
