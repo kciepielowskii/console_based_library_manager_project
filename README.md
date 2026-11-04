@@ -22,10 +22,10 @@ The application runs in the console and focuses on correct business logic, clean
 
 - Add a new book to the library.
 - Store the following information:
-    - ISBN
-    - Title
-    - Author
-    - Publication year
+  - ISBN
+  - Title
+  - Author
+  - Publication year
 - Prevent adding books with duplicate ISBN numbers.
 - Validate all book attributes.
 
@@ -33,8 +33,8 @@ The application runs in the console and focuses on correct business logic, clean
 
 - Register new readers.
 - Store the following information:
-    - Reader ID
-    - Reader name
+  - Reader ID
+  - Reader name
 - Prevent registering readers with duplicate IDs.
 - Validate reader information.
 
@@ -172,7 +172,90 @@ Important test scenarios:
 
 ---
 
-## 6. Optional Features
+## 6. Project Structure
+
+```
+src/
+├── main/java/
+│   ├── Book.java              — Immutable record representing a book (ISBN, title, author, year)
+│   ├── Reader.java            — Class representing a reader with borrowed book management (max 3 books)
+│   ├── Library.java           — Core class managing books, readers, borrowing, searching, and reporting
+│   ├── Main.java              — Console application entry point with interactive menu
+│   └── exception/
+│       ├── BookAlreadyBorrowedException.java   — Thrown when attempting to borrow an already borrowed book
+│       ├── BookNotFoundException.java          — Thrown when a book does not exist
+│       ├── BorrowLimitExceededException.java   — Thrown when a reader exceeds the 3-book borrowing limit
+│       └── ReaderNotFoundException.java        — Thrown when a reader does not exist
+└── test/java/
+    ├── BookTest.java          — 13 tests covering validation, boundary values, and equals/hashCode
+    ├── ReaderTest.java        — 13 tests covering constructor, borrowing, returning, and immutability
+    └── LibraryTest.java       — 44 tests covering all library operations and edge cases
+```
+
+### Class Responsibilities
+
+| Class | Responsibility |
+|---|---|
+| `Book` | Immutable data carrier with validation in compact constructor |
+| `Reader` | Manages borrowed books, enforces borrowing limit (3), returns unmodifiable copies |
+| `Library` | Central coordinator: book catalog, reader registry, borrowing/returning, search, statistics, reports |
+| `Main` | Interactive console menu with error handling for all operations |
+
+---
+
+## 7. Console Application Features
+
+The application provides an interactive menu with the following features:
+
+| # | Feature | Description |
+|---|---|---|
+| 1 | Add book | Add a new book with ISBN, title, author, and year |
+| 2 | Borrow book | Borrow a book by ISBN (enforces availability and 3-book limit) |
+| 3 | Return book | Return a borrowed book by ISBN |
+| 4 | Search by ISBN | Find a specific book by its ISBN |
+| 5 | Search by author | Find all books by a given author, sorted by title |
+| 6 | List available books | Display all currently available (not borrowed) books |
+| 7 | My borrowed books | Display books currently borrowed by the logged-in reader |
+| 8 | Library statistics | Show total books, borrowed count, available count, and books per author |
+| 9 | Library report | Generate a formatted report of all readers and their borrowed books |
+| 10 | Log out | Return to the main menu |
+
+All operations include error handling with user-friendly messages.
+
+---
+
+## 8. Performance Optimizations
+
+The following optimizations were applied during code review:
+
+- **O(1) borrow check**: A `Set<Book>` index tracks borrowed books, replacing O(n) iteration across all readers.
+- **O(1) reader lookup**: `findBooksBorrowedByReader()` uses `Map.get()` instead of streaming all readers.
+- **Redundant check removed**: `returnBook()` performs a single lookup instead of double-checking borrow status.
+- **Borrowing limit constant**: The 3-book limit is defined as `MAX_BORROWED_BOOKS` constant in `Reader`.
+
+---
+
+## 9. Testing
+
+The project uses **JUnit 5** for automated testing with comprehensive coverage:
+
+| Test Class | Tests | Coverage |
+|---|---|---|
+| `BookTest` | 13 | Constructor validation, null/blank checks, year boundaries (1, current year), equals/hashCode |
+| `ReaderTest` | 13 | Constructor validation, borrow/return success, null checks, duplicate prevention, limit enforcement, immutability |
+| `LibraryTest` | 44 | Add/register, find operations, borrow/return flow, available books, statistics, report generation |
+
+**Total: 70 automated tests.**
+
+Run all tests:
+```bash
+# Via IDE: Run 'All Tests' configuration
+# Or individually: BookTest, ReaderTest, LibraryTest
+```
+
+---
+
+## 10. Optional Features
 
 The project may be extended with borrowing dates and return deadlines using `java.time.LocalDate`.
 
@@ -185,7 +268,7 @@ Planned functionality:
 
 ---
 
-## 7. Development Goals
+## 11. Development Goals
 
 The main learning objectives are:
 
@@ -200,9 +283,9 @@ The main learning objectives are:
 
 ---
 
-## 8. Project Status
+## 12. Project Status
 
-<ins>In development</ins>
+**Completed**
 
-The project is being implemented incrementally. Each logical feature is developed, tested, and committed separately.
+All core features are implemented, tested, and optimized. The application runs as a fully functional console program with 70 passing automated tests.
 
