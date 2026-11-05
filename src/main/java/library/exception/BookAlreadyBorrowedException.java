@@ -1,4 +1,4 @@
-package exception;
+package library.exception;
 
 public class BookAlreadyBorrowedException extends RuntimeException {
     public BookAlreadyBorrowedException(String message) {

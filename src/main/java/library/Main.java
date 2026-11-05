@@ -1,3 +1,5 @@
+package library;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,8 +56,8 @@ public class Main {
                             System.out.println("5. Search books by author");
                             System.out.println("6. List available books");
                             System.out.println("7. My borrowed books");
-                            System.out.println("8. Library statistics");
-                            System.out.println("9. Library report");
+                            System.out.println("8. library.Library statistics");
+                            System.out.println("9. library.Library report");
                             System.out.println("10. Log out");
 
                             try {
@@ -77,7 +79,7 @@ public class Main {
                                         int year = Integer.parseInt(scanner.nextLine());
 
                                         library.addBook(new Book(isbn, title, author, year));
-                                        System.out.println("Book added successfully.");
+                                        System.out.println("library.Book added successfully.");
                                         break;
 
                                     case 2:
@@ -85,7 +87,7 @@ public class Main {
                                         String borrowIsbn = scanner.nextLine();
 
                                         library.borrowBook(reader.getId(), borrowIsbn);
-                                        System.out.println("Book borrowed successfully.");
+                                        System.out.println("library.Book borrowed successfully.");
                                         break;
 
                                     case 3:
@@ -93,7 +95,7 @@ public class Main {
                                         String returnIsbn = scanner.nextLine();
 
                                         library.returnBook(returnIsbn);
-                                        System.out.println("Book returned successfully.");
+                                        System.out.println("library.Book returned successfully.");
                                         break;
 
                                     case 4:
@@ -149,7 +151,7 @@ public class Main {
                                         break;
 
                                     case 8:
-                                        System.out.println("=== Library Statistics ===");
+                                        System.out.println("=== library.Library Statistics ===");
                                         System.out.println("Total books: " + library.getTotalBooksCount());
                                         System.out.println("Borrowed books: " + library.getBorrowedBooksCount());
                                         System.out.println("Available books: " + (library.getTotalBooksCount() - library.getBorrowedBooksCount()));
