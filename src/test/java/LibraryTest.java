@@ -534,7 +534,7 @@ public class LibraryTest {
         library.addBook(book);
         library.registerReader(reader);
         library.borrowBook(1, "978-0141439518");
-        assertEquals(1, library.getTotalBooksCount());
+        assertEquals(1, library.getBorrowedBooksCount());
     }
     @Test
     public void shouldReturnBorrowedBooksCount() {
