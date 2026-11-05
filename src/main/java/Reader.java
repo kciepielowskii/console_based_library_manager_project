@@ -34,7 +34,9 @@ public class Reader {
         return List.copyOf(borrowedBooks);
     }
 
-    public void borrowBook(Book book) {
+    // Package-private on purpose: only Library may change the loans,
+    // so that its rules cannot be bypassed
+    void borrowBook(Book book) {
         if (book == null) {
             throw new IllegalArgumentException("Book must not be null");
         }
@@ -49,7 +51,9 @@ public class Reader {
         borrowedBooks.add(book);
     }
 
-    public void returnBook(Book book) {
+    // Package-private on purpose: only Library may change the loans,
+    // so that its rules cannot be bypassed
+    void returnBook(Book book) {
         if (book == null) {
             throw new IllegalArgumentException("Book must not be null");
         }

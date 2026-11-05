@@ -25,3 +25,8 @@ replay_pid*
 
 # IntelliJ IDEA
 .idea/
+*.iml
+
+# Maven and build output
+target/
+out/
