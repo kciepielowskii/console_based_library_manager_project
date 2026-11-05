@@ -1,6 +1,8 @@
-import exception.BookAlreadyBorrowedException;
-import exception.BookNotFoundException;
-import exception.BorrowLimitExceededException;
+package library;
+
+import library.exception.BookAlreadyBorrowedException;
+import library.exception.BookNotFoundException;
+import library.exception.BorrowLimitExceededException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +36,14 @@ public class Reader {
         return List.copyOf(borrowedBooks);
     }
 
-    // Package-private on purpose: only Library may change the loans,
+    // Package-private on purpose: only library.Library may change the loans,
     // so that its rules cannot be bypassed
     void borrowBook(Book book) {
         if (book == null) {
-            throw new IllegalArgumentException("Book must not be null");
+            throw new IllegalArgumentException("library.Book must not be null");
         }
         if (borrowedBooks.contains(book)) {
-            throw new BookAlreadyBorrowedException("Book is already borrowed by this reader");
+            throw new BookAlreadyBorrowedException("library.Book is already borrowed by this reader");
         }
         if (borrowedBooks.size() >= MAX_BORROWED_BOOKS) {
             throw new BorrowLimitExceededException(
@@ -51,14 +53,14 @@ public class Reader {
         borrowedBooks.add(book);
     }
 
-    // Package-private on purpose: only Library may change the loans,
+    // Package-private on purpose: only library.Library may change the loans,
     // so that its rules cannot be bypassed
     void returnBook(Book book) {
         if (book == null) {
-            throw new IllegalArgumentException("Book must not be null");
+            throw new IllegalArgumentException("library.Book must not be null");
         }
         if (!borrowedBooks.contains(book)) {
-            throw new BookNotFoundException("Book not found");
+            throw new BookNotFoundException("library.Book not found");
         }
         borrowedBooks.remove(book);
     }

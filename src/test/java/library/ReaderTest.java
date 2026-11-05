@@ -1,6 +1,8 @@
-import exception.BookAlreadyBorrowedException;
-import exception.BookNotFoundException;
-import exception.BorrowLimitExceededException;
+package library;
+
+import library.exception.BookAlreadyBorrowedException;
+import library.exception.BookNotFoundException;
+import library.exception.BorrowLimitExceededException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

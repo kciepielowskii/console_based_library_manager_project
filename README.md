@@ -1,4 +1,4 @@
-# Console-Based Library Management System
+# Console-Based library.Library Management System
 
 A console application for managing a small library, written in Java. It was built as a learning project to practice object-oriented design, collections, the Stream API, `Optional`, custom exceptions, data validation and automated testing.
 
@@ -8,7 +8,7 @@ A console application for managing a small library, written in Java. It was buil
 - Borrow a book: the book and the reader must exist, the book must be available and the reader can have at most 3 books.
 - Return a book.
 - Search: find a book by ISBN (`Optional`), find books by author (sorted by title), list available books, list books borrowed by a reader, count books per author.
-- Library statistics and a text report of all readers with their borrowed books.
+- library.Library statistics and a text report of all readers with their borrowed books.
 - Interactive console menu with friendly error messages (invalid numbers and business rule violations never crash the program).
 
 ## Tech stack
@@ -29,7 +29,7 @@ mvn test
 
 # compile and start the console application
 mvn compile
-java -cp target/classes Main
+java -cp target/classes library.Main
 ```
 
 In IntelliJ IDEA: open the project folder (the `pom.xml` is detected automatically), then run `Main` or use the Maven window: `Lifecycle` → `test`.
@@ -41,7 +41,7 @@ The main menu lets you sign in or exit. Signing in with an existing ID logs the 
 Example report:
 
 ```
-Library report
+library.Library report
 Books: 2 (borrowed: 1, available: 1)
 Readers: 2
   1 Alice: Emma
@@ -54,19 +54,19 @@ Readers: 2
 pom.xml
 src/
 ├── main/java/
-│   ├── Book.java        — immutable record (ISBN, title, author, year) with validation
-│   ├── Reader.java      — reader with borrowed books (max 3)
-│   ├── Library.java     — catalog, readers, borrowing, searching, statistics, report
-│   ├── Main.java        — interactive console menu
+│   ├── library.Book.java        — immutable record (ISBN, title, author, year) with validation
+│   ├── library.Reader.java      — reader with borrowed books (max 3)
+│   ├── library.Library.java     — catalog, readers, borrowing, searching, statistics, report
+│   ├── library.Main.java        — interactive console menu
 │   └── exception/
 │       ├── BookAlreadyBorrowedException.java
 │       ├── BookNotFoundException.java
 │       ├── BorrowLimitExceededException.java
 │       └── ReaderNotFoundException.java
 └── test/java/
-    ├── BookTest.java
-    ├── ReaderTest.java
-    └── LibraryTest.java
+    ├── library.BookTest.java
+    ├── library.ReaderTest.java
+    └── library.LibraryTest.java
 ```
 
 ## Design decisions

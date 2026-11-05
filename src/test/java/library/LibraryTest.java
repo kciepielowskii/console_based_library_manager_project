@@ -1,7 +1,9 @@
-import exception.BookAlreadyBorrowedException;
-import exception.BookNotFoundException;
-import exception.BorrowLimitExceededException;
-import exception.ReaderNotFoundException;
+package library;
+
+import library.exception.BookAlreadyBorrowedException;
+import library.exception.BookNotFoundException;
+import library.exception.BorrowLimitExceededException;
+import library.exception.ReaderNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -588,7 +590,7 @@ public class LibraryTest {
     @Test
     public void shouldBuildReportForEmptyLibrary() {
         Library library = new Library();
-        assertEquals("Library report\nBooks: 0 (borrowed: 0, available: 0)\nReaders: 0\n",
+        assertEquals("library.Library report\nBooks: 0 (borrowed: 0, available: 0)\nReaders: 0\n",
                 library.buildReport());
     }
     @Test
